@@ -10,343 +10,337 @@ Lab version:15.4
 
 Last updated:11/15/2017
 
-## Overview
+## 概述
 
-In this lab, you'll learn about Git support in Team Foundation Server 2018 and Visual Studio 2017. Git is a distributed version control system with repositories that live both locally (such as on a developer's machine) and hosted on Team Foundation Server. And if you have any doubt about the scalability of Git, rest assured that TFS support for Git Virtual File System ([GVFS](http://www.gvfs.io/)) empowers you to virtually unlimited scale. Just ask the Windows team-they use it to manage over 300GB across 3.5 million files.
+在本实验中，您将了解Team Foundation Server 2018和Visual Studio 2017中的Git源代码管理工具. Git是一个分布式版本管理系统，其中存储库既可以在本地（例如在开发人员的计算机上）存在，也可以存储在Team Foundation Server上。TFS Git支持GFS虚拟文件系统 ([GVFS](http://www.gvfs.io/)) ，GFS几乎可以使您可以无限扩展Git存储库。微软的Windows团队使用它来管理超过300万个，共300GB的文件。
 
-## Prerequisites
+# 关于Fabrikam Fiber的项目背景
 
-In order to complete this lab you will need the Visual Studio 2017 virtual machine provided by Microsoft. Click the button below to launch the virtual machine on the Microsoft Hands-on-Labs portal.
+这套动手实验室使用一家虚拟的公司Fabrikam Fiber作为您正在了解的场景的背景。Fabrikam Fiber向美国提供有线电视和相关服务。他们正在迅速增长，并且已经拥抱Windows Azure部署他们的网站，并允许用户在网站上自助购票。他们还使用ASP.NET MVC应用程序为其客户经理管理客户订单。
 
-<a href="https://www.microsoft.com/handsonlabs/SelfPacedLabs?storyId=external%3A%2F%2Fcontent-private%2Fcontent%2Fexternal%2FMicrosoft-Virtual-Labs%2FDT00163" class="launch-hol" role="button" target="_blank"><span class="lab-details">Launch the virtual machine</span></a>
+在这套动手实验室中，您将参与许多涉及Fabrikam Fiber开发和测试团队的场景。这个由8-10人组成的团队决定使用Visual Studio应用程序生命周期管理工具来管理他们的源代码，运行他们的生成，测试他们的网站，并计划和跟踪项目。
 
-Alternatively, you can download the virtual machine from [here](../almvmdownload/)
+## 练习1：开始使用Git
 
-# About the Fabrikam Fiber Scenario
+在本练习中，您将学习如何创建，克隆和推送Git存储库中的提交到Team Foundation Server。
 
-This set of hands-on-labs uses a fictional company, Fabrikam Fiber, as a backdrop to the scenarios you are learning about. Fabrikam Fiber provides cable television and related services to the United States. They are growing rapidly and have embraced Windows Azure to scale their customer-facing web site directly to end-users to allow them to self-service tickets and track technicians. They also use an on-premises ASP.NET MVC application for their customer service representatives to administer customer orders.
+### 任务1：创建一个Git仓库
 
-In this set of hands-on labs, you will take part in a number of scenarios that involve the development and testing team at Fabrikam Fiber. The team, which consists of 8-10 people has decided to use Visual Studio application lifecycle management tools to manage their source code, run their builds, test their web sites, and plan and track the project.
+1. 使用用户 **Sachin Raj (VSALM\Sachin)**登录。所有的用户密码都是 **P2ssw0rd**。
 
-## Exercise 1: Getting started with Git
-
-In this exercise, you will learn how to create, clone, and push commits to a Git repository in Team Foundation Server.
-
-### Task 1: Creating a Git repository
-
-1. Log in as **Sachin Raj (VSALM\Sachin)**. All user passwords are **P2ssw0rd**.
-
-1. Launch **Visual Studio 2017** from the taskbar and open **Team Explorer**. You should now be connected to the **FabrikamFiber** team project. If you are not automatically connected to the **FabrikamFiber** project, click the **Manage Connections** and then double-click the **FabrikamFiber** project to do so.
+1. 从任务栏启动**Visual Studio 2017**并打开**Team Explorer**。您现在应该连接到**FabrikamFiber**团队项目。如果您没有自动连接到**FabrikamFiber**项目，请单击管理连接，然后双击**FabrikamFiber**项目来执行此操作。
 
     ![](images/000.png)
 
 1. There are a few reasons why Fabrikam Fiber might want to use Git as their source control option within Team Foundation Server. One reason could be that they are collaborating with developers using a tool such as Xcode, which supports the Git protocol natively. Another reason could be that they have developers working offline (such as during a commute) who want to commit code locally when they are offline and check this code into Team Foundation Server when they get into the office. Microsoft now offers teams the ability to utilize Git without sacrificing the integrated application lifecycle management capabilities offered by Team Foundation Server. Visual Studio 2017 also provides developers with a great experience for working with any Git repository - whether it's hosted by Team Foundation Server, a local repository, or another Git provider.
+Fabrikam Fiber希望在Team Foundation Server中使用Git作为其源代码管理的原因有几个。其中一个原因是开发人员使用Xcode等工具进行开发，Xcode本身支持Git。另一个原因是开发人员需要在脱机状态下工作，并且希望在脱机状态下在本地提交代码，并在进入办公室时将此代码复制到Team Foundation Server中。微软现在为团队提供了Git源代码管理支持。Visual Studio 2017还为开发人员提供了管理Git存储库的工具 - 无论存储库是由Team Foundation Server，本地存储库还是其他Git工具创建的。
 
-1. From the **Home** dropdown menu, select **Projects and My Teams \| New Team Project**.
+1. 从**Home**下拉菜单中选择**Projects and My Teams \| New Team Project**。
 
     ![](images/001.png)
 
-1. Name the new project **"FabrikamCommunity"** and click **Next**.
+1. 将新项目命名为**"FabrikamCommunity"**，然后单击**Next**。
 
     ![](images/002.png)
 
-1. Select the **Scrum** process template and click **Next** to continue.
+1. 选择**Scrum**流程模板，然后单击**Next**继续。
 
     ![](images/003.png)
 
-1. Select the **Git** version control system and then click **Finish**.
+1. 选择**Git**作为版本管理，然后单击 **Finish**。
 
     ![](images/004.png)
 
-1. After the new Git team project has been created, click **Close** to return to Visual Studio.
+1. 在创建新的Git团队项目之后，单击**Close**返回到Visual Studio。
 
-### Task 2: Cloning a Git repository
+### 任务2：克隆Git存储库
 
-1. In **Team Explorer**, click **Clone this repository**.
+1. 在**Team Explorer**中，单击**Clone this repository**。
 
     ![](images/005.png)
 
-1. Accept the default endpoint and repository location and then click **Clone**.
+1. 使用默认路径和存储库位置，然后单击**Clone**。
 
     ![](images/006.png)
 
-1. Click the **Manage Connections** button and double-click **FabrikamCommunity** to connect to the new team project.
+1. 单击**Manage Connections**按钮，然后双击**FabrikamCommunity**以连接到新建的团队项目。
 
     ![](images/007.png)
 
-### Task 3: Committing code and linking to work items
+### 任务3：提交代码并链接到工作项目
 
-1. In **Team Explorer**, click the **Home** button, followed by **Settings**.
+1. 在**Team Explorer**中，单击**Home**按钮，然后单击**Settings**。
 
     ![](images/008.png)
 
-1. Click **Global Settings** under **Git**.
+1. 点击**Git**下的**Global Settings**。
 
     ![](images/009.png)
 
-1. Enter an email address for Sachin Raj (**sachin@vsalm.local**) and then click **Update**.
+1. 输入Sachin Raj的电子邮件地址（**sachin@vsalm.local**），然后点击**Update**。
 
     ![](images/010.png)
 
-1. Click the **Home** button in **Team Explorer**.
+1. 单击**Team Explorer**中的**Home**按钮。
 
     ![](images/011.png)
 
-1. Create a new work item for the product backlog by selecting **Team \| New Work Item \| Product Backlog Item** from the main menu. This will launch the **New Product Backlog Item** form in TFS via your browser.
+1. 在浏览器中连接到TFS网站，并选择**FabrikamCommunity**团队项目，从主菜单选择**Team \| New Work Item \| Product Backlog Item**打开**New Product Backlog Item**表单。
 
-1. Enter a title of **"Create new web site"** and then click the **Save** button. Take note of the **ID** once the work item is saved.
+1. 输入**"Create new web site"**标题，然后点击**Save**按钮。工作项目保存后，请记下ID。
 
     ![](images/012.png)
 
-1. Return to Visual Studio. In **Team Explorer**, click **New...** underneath the **Solutions** section.
+1. 回到Visual Studio。在**Team Explorer**中，单击**Solutions**下方的**New...**。
 
     ![](images/013.png)
 
-1. In the **New Project** window, select the **Visual C# \| Web \| ASP.NET Web Application** template and click **OK**.
+1. 在**New Project**窗口中，选择**Visual C# \| Web \| ASP.NET Web Application**序模板并单击**OK**。
 
     ![](images/014.png)
 
-1. Select the **MVC** template and click **OK**.
+1. 选择**MVC**模板，然后单击**OK**。
 
     ![](images/015.png)
 
-1. Once the project has finished creating, click **Changes** in **Team Explorer** to see the list of files to commit.
+1. 项目创建后，在**Team Explorer**中单击**Changes**查看文件提交的列表。
 
     ![](images/016.png)
 
-1. Scroll down the list of included changes to the end and note that .gitattributes and .gitignore files were automatically added to the project. The **.gitattributes** file contains various settings to control Git behavior whereas the **.gitignore** file specifies patterns and extensions to ignore when detecting changes.
+1. 滚动到**included changes**列表的最后，.gitattributes和.gitignore文件被自动添加到项目中。**.gitattributes**文件包含Git设置，以控制GIT中的操作。而**.gitignore**文件指定忽略修改的文件。
 
     ![](images/017.png)
 
-1. If you'd like to exclude a specific file (or type of file based on extension), you can right-click it here and select one of the options. This will update **.gitignore** for you. Don't do that now.
+1. 如果您想排除特定文件（或基于扩展名的文件类型），可以在此处右键单击它并选择其中一个选项。这会为你更新**.gitignore**。现在不要做这个操作。
 
     ![](images/018.png)
 
-1. Enter a commit message of **"initial MVC site for work item #247"**. Typing **"#"** followed by the work item ID will automatically link the commit to the work item when pushed to the server. If the Product Backlog Item that you saved has a different ID, use that number instead.
+1. 输入提交注释，注释以类似于**"initial MVC site for work item #247"**。输入**"#"**后紧跟工作项ID，将在提交到TFS服务器时自动将此次提交链接到ID对应的工作项。这里使用您保存的产品待办事项ID替换这里的247。
 
     ![](images/019.png)
 
-1. Commit the changes by clicking **Commit All**.
+1. 通过单击**Commit All**来提交更改。
 
     ![](images/020.png)
 
-1. Let's make a small change to the web site. In **Solution Explorer**, open **_Layout.cshtml** from the **Views\Shared** folder.
+1. 让我们对网站进行一些小改动。在**Solution Explorer**中，从**Views\Shared**文件夹中打开**_Layout.cshtml**。
 
     ![](images/021.png)
 
-1. Modify the end of the page title **"My ASP.NET Application"** to **"Community"** (around line **6**).
+1. 将页面标题**"My ASP.NET Application"**的末尾修改为**"Community"**（大约在第**6**行）。
 
     ![](images/022.png)
 
-1. In **Team Explorer**, enter a commit message and then click **Commit All**. **Save** changes to files when prompted.
+1. 在**Team Explorer**中，输入提交注释，然后单击**Commit All**。弹出提示时选择**Save**保存对文件的更改。
 
     ![](images/023.png)
 
-### Task 4: Synchronizing commits with the server
+### 任务4：向服务器同步提交
 
-1. Navigate to the commits view by clicking **Sync**.
+1. 通过单击**Sync**导航到提交视图。
 
     ![](images/024.png)
 
-1. The **Synchronization** view in **Team Explorer** shows both incoming and outgoing commits. However, since this project has not yet been published to source control, you only need to click **push**.
+1. **Team Explorer**中的**Synchronization**视图显示传入和传出的提交。但是，由于此项目尚未发布到源代码管理，因此您只需单击**push**即可。
 
     ![](images/025.png)
 
     ![](images/026.png)
 
-1. Finally, let's take a quick peek at what these commits look like in the web portal. In **Team Explorer**, click **Web Portal**.
+1. 最后，让我们快速在TFS网站中浏览一下这些提交。在**Team Explorer**中，单击**Web Portal**。
 
     ![](images/027.png)
 
-1. From the **Code** dropdown in the web portal, select **Commits**.
+1. 从Web门户的**Code**下拉列表中选择**Commits**。
 
     ![](images/028.png)
 
-1. Click the first (bottom) commit.
+1. 点击第一个（底部）提交。
 
     ![](images/029.png)
 
-1. Note that one work item has been linked to the commit based on the ID tag in the comment. Click it to expand and then select the **"Create new web site"** work item to view it in a new tab.
+1. 请注意，一个工作项目已根据注释中的ID标记链接到这个提交。点击展开它，然后选择**"Create new web site"**工作项以在新选项卡中查看它。
 
     ![](images/030.png)
 
-1. Close the work item tab when satisfied.
+1. 查看后关闭工作项目选项卡。
 
-1. Click Sachin's name and click the **Pushed on** link.
+1. 点击Sachin的名字，然后点击 **Pushed on**链接。
 
     ![](images/031.png)
 
-1. Although this version happens to be the latest, you would be able to explore or download the version at this particular commit by clicking one of the links.
+1. 您可以通过单击其中一个链接来浏览或下载此特定提交的版本。
 
     ![](images/032.png)
 
-### Task 5: Tagging a release
+### 任务5：标记发布
 
-1. While it may not seem like much, the product team has decided that this version of the site is exactly what's needed for v1.0. In order to mark it as such, navigate to the **Tags** tab and click **Create Tag**.
+1. 虽然看起来不多，但产品团队已经决定该版本的网站正是v1.0所需要的。为了标记它，请导航到**Tags**选项卡，然后单击**Create Tag**。
 
     ![](images/033.png)
 
-1. Enter a **name** of **"v1.0"** and a **Description** of **"First release!"**. Click **Create**.
+1. 在**name**中输入**"v1.0"**，**Description**中输入**"First release!"**，点击**Create**。
 
     ![](images/034.png)
 
-1. You have now tagged the project at this release. You could tag commits for a variety of reasons, and TFS offers the flexibility to edit and delete them, as well as manage their permissions.
+1. 您现在已经在此版本上标记了该项目。您可以出于各种原因对提交进行标记，并且TFS可以灵活地编辑和删除它们，也可以管理标记的权限。
 
     ![](images/035.png)
 
-## Exercise 2: Git forking, branching, and merging
+## 练习2：Git分叉，分支和合并
 
 In this exercise, you will learn about Git forking, branching, and merging support in Visual Studio. In general, forking and branching are often used to help switch development contexts and to isolate risk. For example, a core project team might use Git forks to allow people from outside the team to contribute to the project without allowing them direct commit access. Since a Git fork is a server-side copy of the project, the experience is the same, except that it provides a layer of manageability for the owner. Git branching is a similar concept that allows someone to work within a project without committing to the master branch. For teams of 2-5, it is recommended that you use only branches (and not forks) for most scenarios. Creating a Git branch is a lightweight (and therefore fast) operation, as you are simply creating a new reference to an existing commit. This is very different from a Git fork or Team Foundation Version Control (TFVC) branching where the entire source tree needs to be duplicated server-side. We will also take a quick look at the merging support for Git projects.
+在本练习中，您将学习有关Visual Studio中的Git分叉，分支和合并等功能。通常，分叉和分支常常用于切换开发环境，实现隔离并行开发的风险。例如，核心项目团队可能会使用Git分支来允许团队外的人员为项目提供修改，而不允许他们直接提交修改。由于Git fork是项目的服务器端副本，所以体验是相同的，只不过它为所有者提供了一层可管理性。Git分支是一个类似的概念，允许成员在一个项目中工作而不允许直接在主分支提交修改。建议您在大多数情况下只使用分支（而不是分支）。创建一个Git分支是一个轻量，快速的操作，因为您只是创建对现有提交的新引用。这与Git分叉或TFVC分支非常不同，因为Git分叉或TFVC的分支需要在服务器端复制整个存储库。我们还将快速了解对Git合并的支持。
 
-### Task 1: Forking a repository
+### 任务1：分叉存储库
 
-1. From the navigation bar, click **Fork**. This fork will be intended for people outside the team to contribute changes to the project. For example, if someone wants to offer a bug fix, they would push it to a branch on this fork and request a pull. Someone from the team (Sachin, in this case) will monitor the pull requests and manage changes back through merges until they get to the primary project.
+1. 从导航栏中，单击**Fork**。该分叉将用于团队外的人员为项目提供更改。例如，如果有人想提交对Bug的修改，他们会将其推送到此分叉上的分支并请求拉取。团队中的成员（这里是Sachin）会评审拉取请求，在满足合并要求后通过合并将变更合并到主项目中
 
     ![](images/036.png)
 
-1. Set the **Repository name** to **"FabrikamCommunity.External.fork"** and click **Fork**. Note that you could specify to include all branches, although only the **default branch** is usually forked.
+1. 将**Repository name**设置为**"FabrikamCommunity.External.fork"**并单击**Fork**。请注意，您可以指定包含所有分支，但通常只分叉**default branch**。
 
     ![](images/037.png)
 
-1. Click **Clone** and click **Clone in Visual Studio**. This will speed up the process of getting a copy of the code into your development environment.
+1. 在Visual Studio中单击**Clone**。将分叉的存储库克隆到本地。
 
     ![](images/038.png)
 
-1. Click **Allow** to allow Visual Studio to read the clone file.
+1. 单击**Allow**以允许Visual Studio读取克隆文件。
 
     ![](images/039.png)
 
-1. Click **Clone** to clone the repo.
+1. 点击 **Clone**克隆存储库。
 
     ![](images/040.png)
 
-1. After cloning has completed, locate **WebApplication1.sln** in **Solution Explorer** and double-click to open it. Note that while it's virtually identical to the solution committed to Git earlier, it's an entirely separate copy that's associated with a completely different repo.
+1. 克隆完成后，在**Solution Explorer**中找到**WebApplication1.sln**，然后双击将其打开。请注意，尽管它与之前Git存储库几乎完全相同，但它是与之前存储库关联的完全不同的存储库。
 
     ![](images/041.png)
 
-### Task 2: Branching code
+### 任务2：分支代码
 
-1. In **Team Explorer**, click **Branches**.
+1. 在**Team Explorer**中，单击 **Branches**.
 
     ![](images/042.png)
 
-1. Let's say that we would like to create a new branch to do some development work on the web site. Right-click the **master** branch node and select **New Local Branch From**.
+1. 假设我们想创建一个新的分支来在网站上进行一些开发工作。右键单击**master**分支节点并选择**New Local Branch From**。
 
     ![](images/043.png)
 
-1. Set the name to **"users/sachin/about"** and click **Create Branch**. Note that the name uses a branching naming convention so that **"sachin/about"** will be treated as a subsection of **"users"**.
+1. 将名称设置为**"users/sachin/about"**，然后单击**Create Branch**。请注意，该名称使用的分支命名将此分支创建在**"users/sachin"**下。
 
     ![](images/044.png)
 
-1. Double-click the **about** branch to make it the active branch.
+1. 双击**about**签出分支。
 
     ![](images/045.png)
 
-1. In **Solution Explorer**, open the **HomeController.cs** file from the **Controllers** folder.
+1. 在**Solution Explorer**中, 从**Controllers**文件夹中打开**HomeController.cs**文件。
 
     ![](images/046.png)
 
-1. Modify the **About** method as shown in the following screenshot.
+1. 按照如以下屏幕截图所示修改**About**方法。
 
     ![](images/047.png)
 
-1. Right-click somewhere in the whitespace of the editor and select **Source Control \| Commit**.
+1. 右键单击编辑器空白处并选择**Source Control \| Commit**。
 
     ![](images/048.png)
 
-1. In **Team Explorer**, enter a commit message of "**Sachin version**" and click **Commit All**. Save the changes when prompted.
+1. 在**Team Explorer**中，输入提交注释"**Sachin version**"，然后单击**Commit All**。出现提示时选择保存更改。
 
     ![](images/049.png)
 
-1. At this point, the changes have been committed locally. Navigate to the **Branches** view.
+1. 此时，这些更改已提交到本地存储库。导航到**Branches**视图。
 
     ![](images/050.png)
 
-1. Double-click the **Master** branch and note that original version of the **HomeController.cs** file is shown in the code editor window.
+1. 双击**Master**分支，此时**HomeController.cs**文件的原始版本显示在代码编辑器窗口中。
 
     ![](images/051.png)
 
     ![](images/052.png)
 
-1. You don't have to publish the branch to the server yet if you want to continue working locally. As you saw in the previous exercise, you can continue to work locally and add additional commits to the new branch. In **Team Explorer**, right-click the **about** branch and select **View History**.
+1. 如果您想继续在本地工作，则不必将分支推送到服务器。正如您在前面的练习中看到的那样，您可以继续在本地工作并向新分支提交其他修改。在**Team Explorer**中，右键单击**about**分支并选择**View History**。
 
     ![](images/053.png)
 
     ![](images/054.png)
 
-1. When you are ready, you can delete the branch, merge it back into your master branch, or push it to the server-side repository so that teammates can access it. Let's go ahead and publish the branch by right-clicking the **about** branch and selecting the **Push Branch** option.
+1. 现在您可以将其合并回主分支并删除此分支，或将其推送到服务器端的存储库，以便其他团队成员可以拉取你的提交。现在通过右键单击**about**分支并选择**Push Branch**选项来发布分支。
 
     ![](images/055.png)
 
-1. Open a **Remote Desktop** session to **VSALM**. Connect using user **Clemri Steyn (VSALM\Clemri)**. All user passwords are **P2ssw0rd**.
+1. 打开**Remote Desktop**连接到VSALM。使用用户**Clemri Steyn (VSALM\Clemri)**进行连接。所有的用户密码都是P2ssw0rd。
 
-1. Launch **Internet Explorer** from the taskbar.
+1. 从任务栏启动**Internet Explorer**。
 
-1. From the project dropdown, select **FabrikamFiberCollection**.
+1. 从项目集合下拉列表中选择**FabrikamFiberCollection**。
 
     ![](images/056.png)
 
-1. Mouse over the **FabrikamCommunity** team and select **Code**.
+1. 将鼠标悬停在**FabrikamCommunity**团队项目上并选择**Code**。
 
     ![](images/057.png)
 
-1. From the **FabrikamCommunity** repo dropdown, select **FabrikamCommunity.External.fork**.
+1. 从**FabrikamCommunity**存储库下拉菜单中选择**FabrikamCommunity.External.fork**。
 
     ![](images/058.png)
 
-1. Click the **Clone** button and follow the workflow from earlier to clone the project in Visual Studio.
+1. 单击**Clone**按钮并按照之前的工作流程在Visual Studio中克隆该项目。
 
     ![](images/059.png)
 
-1. From **Solution Explorer**, double-click the **WebApplication1.sln** solution to open it.
+1. 在**Solution Explorer**中，双击**WebApplication1.sln**解决方案将其打开。
 
     ![](images/060.png)
 
-1. Modify the same **HomeController.cs** file that Sachin did, but this time change the text to be something different. Ordinarily Clemri would make this change in a branch like Sachin did, but for the purposes of this lab he will check directly into the **master** branch.
+1. 修改Sachin修改的相同**HomeController.cs**文件，但是这次将文本改为不同的内容。通常Clemri会像Sachin一样在分支中进行此项更改，但为了实验目的，这里将直接在**master**分支提交修改。
 
     ![](images/061.png)
 
-1. As before, right-click within the whitespace of the code editor and select **Source Control \| Commit**.
+1. 和之前一样，在代码编辑器的空白处右键单击并选择**Source Control \| Commit**。
 
-1. In **Team Explorer**, enter a commit message of "**Clemri version**" and then click **Commit All**. Save changes when prompted. Note that Clemri has committed changes to the master branch.
+1. 在**Team Explorer**中，提交注释输入"**Clemri version**"，然后单击**Commit All**。提示时选择保存更改。请注意，Clemri在**master**分支直接提交了修改。
 
     ![](images/062.png)
 
-1. Click **Sync** from the commit response.
+1. 从提交反馈中单击**Sync**。
 
     ![](images/063.png)
 
-1. Click **Sync** to execute the actual sync.
+1. 点击**Sync**以执行同步。 
 
     ![](images/064.png)
 
-1. Switch users back to **Sachin** by minimizing the remote desktop session.
+1. 通过最小化远程桌面会话，返回用户Sachin的操作界面。
 
-### Task 3: Merging changes in a repository
+### 任务3：合并存储库中的更改
 
-1. From Sachin's perspective, he has so far created a local branch based off the master, made a change to a file, and then published that branch. He would then like to go ahead and merge his **about** branch back into the **master** branch.
+1. 从Sachin的角度来看，他迄今已经创建了一个基于**master**的本地分支，并在此分支提交了修改，然后发布了该分支。现在他想继续将**about**分支上的修改合并到**master**分支。
 
-1. In **Team Explorer**, double-click the **master** branch to make it active.
+1. 在**Team Explorer**中，双击签出**master**分支。
 
     ![](images/065.png)
 
-1. Expand the **Merge** option.
+1. 展开**Merge**选项。
 
     ![](images/066.png)
 
-1. Select the **about** branch as the source and click **Merge**.
+1. 选择**about**分支作为源并单击**Merge**。
 
     ![](images/067.png)
 
-1. Note that the **master** repository is currently selected and that **HomeController.cs** shows the **about** version of the text. The merge was performed locally by updating the **master** branch to point to the latest commit of the **about** branch.
+1. 请注意，**master**分支当前处于签出状态，并且**HomeController.cs**显示为**about**版本。合并是在本地通过更新**master**分支指向，将其指向为**about**分支的最新提交。
 
     ![](images/068.png)
 
-1. Right-click the **master** branch in **Team Explorer** and select the **View History...** option.
+1. 右键单击 **Team Explorer** 的**master**分支，然后选择**View History...**选项。
 
     ![](images/069.png)
 
-1. The history view now provides a visualization of how the current code came to be by the various branches and commits involved.
+1. 历史视图现在展示了当前代码是如何通过相关的各个分支的提交生成的。
 
     ![](images/070.png)
 
